@@ -11,4 +11,5 @@ Creates a shortcode to display a form which allows users to submit to a Lost and
 - Display CPT data shortcode [lostfound_display]
 - Options page
 - Captcha
-- Customize CPT and Custom Taxonomy
+- Default styling (with admin page option and shortcode attribute override)
+- Customize CPT, Custom Taxonomy, and ACF fields (Would be renamed)

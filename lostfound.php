@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Lost and Found
  * Version: 1.0
- * Description: Creates a shortcode to display a form which allows users to submit to a Lost and Found custom post type with custom fields. Use <strong>[lostfound_form]</strong> to display the form.
+ * Description: Creates a shortcode to display a form which allows users to submit to a Lost and Found custom post type with custom fields and a custom Taxonomy. Use <strong>[lostfound_form]</strong> to display the form.
  * Plugin URI: https://github.com/omfgtora/lostfound
  * Author: Ethan Roberts
  * License: GPL v3 or later
@@ -62,7 +62,7 @@ Class LostFound {
         'pet-types',
         'comments'
       ],
-      'taxonomies' => ['category', 'pet-types', 'post_tag']
+      'taxonomies' => ['pet-types', 'post_tag']
     ]);
 
     register_taxonomy( 'pet-types', 'lostfound', [
