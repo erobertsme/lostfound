@@ -12,6 +12,11 @@ if( function_exists('acf_add_local_field_group') ):
         'type' => 'radio',
         'instructions' => '',
         'required' => 1,
+        'wrapper' => [
+          'width' => '',
+          'class' => '',
+          'id' => '',
+        ],
         'choices' => [
           'Lost' => 'Lost',
           'Found' => 'Found',
@@ -35,6 +40,11 @@ if( function_exists('acf_add_local_field_group') ):
         'prepend' => '',
         'append' => '',
         'maxlength' => '',
+        'wrapper' => [
+          'width' => '',
+          'class' => '',
+          'id' => '',
+        ],
       ],
       [
         'key' => 'field_6071016363a72',
@@ -46,6 +56,11 @@ if( function_exists('acf_add_local_field_group') ):
         'display_format' => 'F j, Y',
         'return_format' => 'Ymd',
         'first_day' => 0,
+        'wrapper' => [
+          'width' => '',
+          'class' => '',
+          'id' => '',
+        ],
       ],
       [
         'key' => 'field_60710a6663a73',
@@ -70,6 +85,11 @@ if( function_exists('acf_add_local_field_group') ):
         'toggle' => 1,
         'allow_custom' => 1,
         'other_choice' => 1,
+        'wrapper' => [
+          'width' => '',
+          'class' => '',
+          'id' => '',
+        ],
       ],
       [
         'key' => 'field_60710abf63a74',
@@ -83,6 +103,11 @@ if( function_exists('acf_add_local_field_group') ):
         'prepend' => '',
         'append' => '',
         'maxlength' => '',
+        'wrapper' => [
+          'width' => '',
+          'class' => '',
+          'id' => '',
+        ],
       ],
       [
         'key' => 'field_60710ad063a75',
@@ -96,6 +121,11 @@ if( function_exists('acf_add_local_field_group') ):
         'prepend' => '',
         'append' => '',
         'maxlength' => '',
+        'wrapper' => [
+          'width' => '',
+          'class' => '',
+          'id' => '',
+        ],
       ],
       [
         'key' => 'field_60710b0763a76',
@@ -108,6 +138,11 @@ if( function_exists('acf_add_local_field_group') ):
         'placeholder' => '',
         'prepend' => '',
         'append' => '',
+        'wrapper' => [
+          'width' => '',
+          'class' => '',
+          'id' => '',
+        ],
       ],
       [
         'key' => 'field_60710b1663a77',
@@ -121,6 +156,11 @@ if( function_exists('acf_add_local_field_group') ):
         'maxlength' => '',
         'rows' => '',
         'new_lines' => '',
+        'wrapper' => [
+          'width' => '',
+          'class' => '',
+          'id' => '',
+        ],
       ],
       [
         'key' => 'field_60710b2c63a78',
@@ -135,6 +175,11 @@ if( function_exists('acf_add_local_field_group') ):
         'insert' => 'append',
         'library' => 'all',
         'mime_types' => 'jpg,jpeg,png,gif',
+        'wrapper' => [
+          'width' => '',
+          'class' => '',
+          'id' => '',
+        ],
       ],
     ],
     'location' => [

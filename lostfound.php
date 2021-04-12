@@ -20,9 +20,9 @@ Class LostFound {
 
   public function __construct() {
     add_action( 'init', [$this, 'initialize'] );
+    add_action( 'get_header', 'acf_form_head' );
     //add_action( 'wp_head', [$this, 'zerospam_load_key']);
     add_shortcode( 'lostfound_form', [$this, 'register_form_shorcode'] );
-    include_once('acf_fields.php');
   }
 
   public function initialize() {
@@ -101,6 +101,8 @@ Class LostFound {
 
     // Hide the ACF admin menu item.
     add_filter('acf/settings/show_admin', '__return_false');
+
+    include_once('acf_fields.php');
   }
 
   function register_form_shorcode($atts) {
@@ -123,7 +125,6 @@ Class LostFound {
     
     ob_start();
 
-    acf_form_head();
     acf_form( $settings );
     $form = ob_get_contents();
     
