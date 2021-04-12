@@ -20,11 +20,7 @@ Class LostFound {
 
   public function __construct() {
     add_action( 'init', [$this, 'initialize'] );
-    add_action( 'admin_post_submit_lostfound_form', [$this, 'handle_form_submit'] );
-    add_action( 'admin_post_nopriv_submit_lostfound_form', [$this, 'handle_form_submit'] );
-    add_action( 'wp_ajax_submit_lostfound_form', [$this, 'handle_ajax_form_submit'] );
-    add_action( 'wp_ajax_nopriv_submit_lostfound_form', [$this, 'handle_ajax_form_submit'] );
-    add_action( 'wp_head', [$this, 'zerospam_load_key']);
+    //add_action( 'wp_head', [$this, 'zerospam_load_key']);
     add_shortcode( 'lostfound_form', [$this, 'register_form_shorcode'] );
     include_once('acf_fields.php');
   }
