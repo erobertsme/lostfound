@@ -2,7 +2,7 @@
 add_action('acf/init', 'lostfound_add_acf_fields');
 function lostfound_add_acf_fields() {
 
-  acf_add_local_field_group([
+  return acf_add_local_field_group([
     'key' => 'group_607100ea1bad5',
     'title' => 'Lost and Found Pets Fields',
     'fields' => [
@@ -13,12 +13,6 @@ function lostfound_add_acf_fields() {
         'type' => 'radio',
         'instructions' => '',
         'required' => 1,
-        'conditional_logic' => 0,
-        'wrapper' => [
-          'width' => '',
-          'class' => '',
-          'id' => '',
-        ],
         'choices' => [
           'Lost' => 'Lost',
           'Found' => 'Found',
@@ -37,12 +31,6 @@ function lostfound_add_acf_fields() {
         'type' => 'text',
         'instructions' => 'Location where the pet was found',
         'required' => 1,
-        'conditional_logic' => 0,
-        'wrapper' => [
-          'width' => '',
-          'class' => '',
-          'id' => '',
-        ],
         'default_value' => '',
         'placeholder' => '',
         'prepend' => '',
@@ -56,12 +44,6 @@ function lostfound_add_acf_fields() {
         'type' => 'date_picker',
         'instructions' => '',
         'required' => 1,
-        'conditional_logic' => 0,
-        'wrapper' => [
-          'width' => '',
-          'class' => '',
-          'id' => '',
-        ],
         'display_format' => 'F j, Y',
         'return_format' => 'Ymd',
         'first_day' => 0,
@@ -73,18 +55,10 @@ function lostfound_add_acf_fields() {
         'type' => 'select',
         'instructions' => '',
         'required' => 1,
-        'conditional_logic' => 0,
-        'wrapper' => [
-          'width' => '',
-          'class' => '',
-          'id' => '',
-        ],
         'taxonomy' => 'pet-type',
         'allow_terms' => '',
         'allow_level' => '',
         'field_type' => 'select',
-        'default_value' => [
-        ],
         'return_format' => 'id',
         'ui' => 0,
         'allow_null' => 0,
@@ -107,12 +81,6 @@ function lostfound_add_acf_fields() {
         'type' => 'text',
         'instructions' => 'Your name',
         'required' => 1,
-        'conditional_logic' => 0,
-        'wrapper' => [
-          'width' => '',
-          'class' => '',
-          'id' => '',
-        ],
         'default_value' => '',
         'placeholder' => '',
         'prepend' => '',
@@ -126,12 +94,6 @@ function lostfound_add_acf_fields() {
         'type' => 'text',
         'instructions' => 'Your Phone Number',
         'required' => 1,
-        'conditional_logic' => 0,
-        'wrapper' => [
-          'width' => '',
-          'class' => '',
-          'id' => '',
-        ],
         'default_value' => '',
         'placeholder' => '',
         'prepend' => '',
@@ -145,12 +107,6 @@ function lostfound_add_acf_fields() {
         'type' => 'email',
         'instructions' => 'Your Email',
         'required' => 0,
-        'conditional_logic' => 0,
-        'wrapper' => [
-          'width' => '',
-          'class' => '',
-          'id' => '',
-        ],
         'default_value' => '',
         'placeholder' => '',
         'prepend' => '',
@@ -163,12 +119,6 @@ function lostfound_add_acf_fields() {
         'type' => 'textarea',
         'instructions' => '',
         'required' => 1,
-        'conditional_logic' => 0,
-        'wrapper' => [
-          'width' => '',
-          'class' => '',
-          'id' => '',
-        ],
         'default_value' => '',
         'placeholder' => '',
         'maxlength' => '',
@@ -182,12 +132,6 @@ function lostfound_add_acf_fields() {
         'type' => 'file',
         'instructions' => '',
         'required' => 0,
-        'conditional_logic' => 0,
-        'wrapper' => [
-          'width' => '',
-          'class' => '',
-          'id' => '',
-        ],
         'uploader' => '',
         'return_format' => 'array',
         'min_size' => '',
@@ -214,5 +158,5 @@ function lostfound_add_acf_fields() {
     'active' => true,
     'description' => '',
   ]);
-  
+
 }

@@ -84,8 +84,8 @@ Class LostFound {
 
   private function include_acf() {
     // Define path and URL to the ACF plugin.
-    define( 'LOSTFOUND_ACF_PATH', plugin_dir_path(__FILE__) . '/includes/acf/' );
-    define( 'LOSTFOUND_ACF_URL', plugin_dir_url(__FILE__) . '/includes/acf/' );
+    define( 'LOSTFOUND_ACF_PATH', plugin_dir_path(__FILE__) . 'includes/acf/' );
+    define( 'LOSTFOUND_ACF_URL', plugin_dir_url(__FILE__) . 'includes/acf/' );
 
     // Include the ACF plugin.
     include_once( LOSTFOUND_ACF_PATH . 'acf.php' );
@@ -115,7 +115,8 @@ Class LostFound {
 
     if ( $post_id === 0 || is_object($post_id) ) return wp_redirect( add_query_arg( [ 'error' => $post_id->get_error_message() ], $redirect_url ) );
 
-    wp_set_object_terms($post_id, $data['pet-type'], 'pet-types');
+    wp_set_post_terms($post_id, $data['pet-type']);
+
     foreach ( $data as $key => $value) {
       if ($value !== '') update_field($key, $value, $post_id);
     }
