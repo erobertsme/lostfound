@@ -108,7 +108,7 @@ Class LostFound {
     $args = [
       'post_author' => 1,
       'post_title' => $data['title'],
-      'post_status' => 'published',
+      'post_status' => 'publish',
       'post_type' => 'lostfound'
     ];
     $post_id = wp_insert_post($args, true);
