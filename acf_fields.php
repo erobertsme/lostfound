@@ -1,8 +1,8 @@
 <?php
-add_action('acf/init', 'lostfound_add_acf_fields');
-function lostfound_add_acf_fields() {
+if( function_exists('acf_add_local_field_group') ):
 
-  return acf_add_local_field_group([
+
+  acf_add_local_field_group([
     'key' => 'group_607100ea1bad5',
     'title' => 'Lost and Found Pets Fields',
     'fields' => [
@@ -159,4 +159,4 @@ function lostfound_add_acf_fields() {
     'description' => '',
   ]);
 
-}
+endif;

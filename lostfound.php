@@ -79,6 +79,7 @@ Class LostFound {
     wp_insert_term('Cat', 'pet-types');
     wp_insert_term('Dog', 'pet-types');
     wp_insert_term('Other', 'pet-types');
+    
     update_option('lostfound_terms_created', true);
   }
 
@@ -91,11 +92,9 @@ Class LostFound {
     include_once( LOSTFOUND_ACF_PATH . 'acf.php' );
 
     // Customize the url setting to fix incorrect asset URLs.
-    add_filter('acf/settings/url',
-      function( $url ) {
+    add_filter('acf/settings/url', function( $url ) {
         return LOSTFOUND_ACF_URL;
-      }
-    );
+    });
 
     // Hide the ACF admin menu item.
     add_filter('acf/settings/show_admin', '__return_false');
