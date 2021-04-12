@@ -1,8 +1,7 @@
 <?php
 if( function_exists('acf_add_local_field_group') ):
 
-
-  acf_add_local_field_group([
+  $acf_fields = [
     'key' => 'group_607100ea1bad5',
     'title' => 'Lost and Found Pets Fields',
     'fields' => [
@@ -55,7 +54,7 @@ if( function_exists('acf_add_local_field_group') ):
         'type' => 'select',
         'instructions' => '',
         'required' => 1,
-        'taxonomy' => 'pet-type',
+        'taxonomy' => 'pet-types',
         'allow_terms' => '',
         'allow_level' => '',
         'field_type' => 'select',
@@ -63,10 +62,9 @@ if( function_exists('acf_add_local_field_group') ):
         'ui' => 0,
         'allow_null' => 0,
         'multiple' => 0,
+        'add_term' => 1,
         'save_terms' => 1,
         'load_terms' => 1,
-        'choices' => [
-        ],
         'ajax' => 0,
         'placeholder' => '',
         'layout' => '',
@@ -157,6 +155,8 @@ if( function_exists('acf_add_local_field_group') ):
     'hide_on_screen' => '',
     'active' => true,
     'description' => '',
-  ]);
+  ];
+
+  acf_add_local_field_group($acf_fields);
 
 endif;

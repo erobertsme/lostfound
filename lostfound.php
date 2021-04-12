@@ -1,6 +1,13 @@
 <?php
 /**
  * Plugin Name: Lost and Found
+ * Version: 1.0
+ * Description: Creates a shortcode to display a form which allows users to submit to a Lost and Found custom post type with custom fields. Use <strong>[lostfound_form]</strong> to display the form.
+ * Plugin URI: https://github.com/omfgtora/lostfound
+ * Author: Ethan Roberts
+ * License: GPL v3 or later
+ * Licence URI: https://www.gnu.org/licenses/gpl-3.0.html
+ * Text Domain: lostfound
  */
 
 if( ! defined( 'ABSPATH' ) ) exit;
@@ -19,7 +26,7 @@ Class LostFound {
     add_action( 'wp_ajax_submit_lostfound_form', [$this, 'handle_ajax_form_submit'] );
     add_action( 'wp_ajax_nopriv_submit_lostfound_form', [$this, 'handle_ajax_form_submit'] );
     add_action( 'wp_head', [$this, 'zerospam_load_key']);
-    add_shortcode( 'lostfoundform', [$this, 'register_form_shorcode'] );
+    add_shortcode( 'lostfound_form', [$this, 'register_form_shorcode'] );
   }
 
   public function initialize() {
@@ -79,7 +86,7 @@ Class LostFound {
     wp_insert_term('Cat', 'pet-types');
     wp_insert_term('Dog', 'pet-types');
     wp_insert_term('Other', 'pet-types');
-    
+
     update_option('lostfound_terms_created', true);
   }
 
@@ -107,8 +114,8 @@ Class LostFound {
     $args = [
       'post_author' => 1,
       'post_title' => $data['title'],
-      'post_status' => 'publish',
-      'post_type' => 'lostfound'
+      'post_status' => 'pending',
+      'post_type' => 'lostfound',
     ];
     $post_id = wp_insert_post($args, true);
 
@@ -130,7 +137,6 @@ Class LostFound {
     ob_end_clean();
     
     return $form;
-
   }
 
   private function form_validation($form_data) {
@@ -145,8 +151,6 @@ Class LostFound {
       $validation['error'] = new WP_Error( 'nonce_error', __("Error: Nonce error", 'lostfound') );
       return $validation;
     }
-
-    $error = null;
 
     $required_fields = [
       'lost-found',
@@ -174,6 +178,8 @@ Class LostFound {
   }
 
   public function handle_form_submit() {
+    if(!isset($_POST)) return;
+
     $form_data = $_POST;
     $validation = $this->form_validation($form_data);
     $url_parts = parse_url( $form_data['_wp_http_referer'] );
