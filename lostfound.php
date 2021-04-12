@@ -16,7 +16,6 @@ if( ! class_exists('LostFound') ) :
 
 register_deactivation_hook( __FILE__, array( 'LostFound', 'deactivate' ) );
 
-
 Class LostFound {
 
   public function __construct() {
@@ -38,7 +37,7 @@ Class LostFound {
     $this->include_acf();
   }
 
-  public function deactivate() { 
+  public function deactivate() {
     delete_option( 'lostfound_terms_created' );
     delete_option( 'lostfound_zerospam_key' );
   }
@@ -48,7 +47,7 @@ Class LostFound {
     register_post_type( 'lostfound', [
       'labels' => [
         'name' => __( 'Lost and Found Pets', 'lostfound' ),
-        'singular_name' => __( 'Lost and Found Pet', 'lostfound' )
+        'singular_name' => __( 'Lost and Found Pet', 'lostfound' ),
       ],
       'public' => true,
       'has_archive' => true,
@@ -60,15 +59,15 @@ Class LostFound {
         'thumbnail',
         'custom-fields',
         'pet-types',
-        'comments'
+        'comments',
       ],
-      'taxonomies' => ['pet-types', 'post_tag']
+      'taxonomies' => ['pet-types', 'post_tag'],
     ]);
 
     register_taxonomy( 'pet-types', 'lostfound', [
       'labels' => [
         'name' => __( 'Pet types', 'lostfound' ),
-        'singular_name' => __( 'Pet type', 'lostfound' )
+        'singular_name' => __( 'Pet type', 'lostfound' ),
       ],
       'rewrite' => ['slug' => 'pet-types'],
       'show_admin_column' => true,
@@ -82,7 +81,7 @@ Class LostFound {
 
   private function create_default_terms() {
     if ( get_option('lostfound_terms_created') ) return;
-    
+
     wp_insert_term('Cat', 'pet-types');
     wp_insert_term('Dog', 'pet-types');
     wp_insert_term('Other', 'pet-types');
@@ -121,9 +120,9 @@ Class LostFound {
 
     if ( $post_id === 0 || is_object($post_id) ) return wp_redirect( add_query_arg( [ 'error' => $post_id->get_error_message() ], $redirect_url ) );
 
-    wp_set_post_terms($post_id, $data['pet-type']);
+    wp_set_post_terms( $post_id, $data['pet-type'] );
 
-    foreach ( $data as $key => $value) {
+    foreach ( $data as $key => $value ) {
       if ($value !== '') update_field($key, $value, $post_id);
     }
   }
@@ -131,24 +130,27 @@ Class LostFound {
   function register_form_shorcode($atts) {
     wp_enqueue_script( 'lostfound_zerospam', plugin_dir_url(__FILE__) . 'includes/js/zerospam.js', [], NULL, true );
     add_action( 'wp_enqueue_scripts', 'lostfound_zerospam' );
+
     ob_start();
     include( 'form_template.php' );
     $form = ob_get_contents();
     ob_end_clean();
-    
+
     return $form;
   }
 
   private function form_validation($form_data) {
-    if ( ! isset( $form_data['lostfound_zerospam_key'] ) || $form_data['lostfound_zerospam_key'] != $this->zerospam_get_key() ) {
+    if ( !isset( $form_data['lostfound_zerospam_key'] ) || $form_data['lostfound_zerospam_key'] != $this->zerospam_get_key() ) {
       $validation['pass'] = false;
       $validation['error'] = new WP_Error( 'spam_error', __("Error: Spam error", 'lostfound') );
+
       return $validation;
     }
 
     if ( empty($form_data['nonce_lostfound_form']) || !wp_verify_nonce($form_data['nonce_lostfound_form'], 'handle_lostfound_form') ) {
       $validation['pass'] = false;
       $validation['error'] = new WP_Error( 'nonce_error', __("Error: Nonce error", 'lostfound') );
+
       return $validation;
     }
 
@@ -184,7 +186,7 @@ Class LostFound {
     $validation = $this->form_validation($form_data);
     $url_parts = parse_url( $form_data['_wp_http_referer'] );
     $redirect_url = $url_parts['path'];
-    
+
     if( isset($validation['error']) ) return wp_redirect( add_query_arg( [ 'form-error' => $validation['error']->get_error_message() ], $redirect_url ) );
 
     // Sanitize data
@@ -210,7 +212,7 @@ Class LostFound {
     wp_send_json_success(['success', $_REQUEST]);
   }
 
-  public function zerospam_get_key() { 
+  public function zerospam_get_key() {
     if ( ! $key = get_option('lostfound_zerospam_key') ) {
       $key = wp_generate_password( 64, false, false );
       update_option( 'lostfound_zerospam_key', $key, FALSE );
