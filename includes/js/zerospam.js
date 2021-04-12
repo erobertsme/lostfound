@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const lostfoundForm = document.getElementById('lostfound');
-
-  console.log(lfzs_key)
+  const lostfoundForm = document.getElementById('lostfound-form');
 
   lostfoundForm.addEventListener('submit', () => {
     const zsInput = document.createElement('input');

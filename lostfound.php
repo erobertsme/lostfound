@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Lost and Found
- * Version: 1.0
+ * Version: 1.1
  * Description: Creates a shortcode to display a form which allows users to submit to a Lost and Found custom post type with custom fields and a custom Taxonomy. Use <strong>[lostfound_form]</strong> to display the form.
  * Plugin URI: https://github.com/omfgtora/lostfound
  * Author: Ethan Roberts
@@ -26,6 +26,7 @@ Class LostFound {
     add_action( 'wp_ajax_nopriv_submit_lostfound_form', [$this, 'handle_ajax_form_submit'] );
     add_action( 'wp_head', [$this, 'zerospam_load_key']);
     add_shortcode( 'lostfound_form', [$this, 'register_form_shorcode'] );
+    include_once('acf_fields.php');
   }
 
   public function initialize() {
@@ -39,7 +40,7 @@ Class LostFound {
 
   public function deactivate() {
     delete_option( 'lostfound_terms_created' );
-    delete_option( 'lostfound_zerospam_key' );
+    // delete_option( 'lostfound_zerospam_key' );
   }
 
   // Register Post type and Taxonomy
@@ -64,12 +65,12 @@ Class LostFound {
       'taxonomies' => ['pet-types', 'post_tag'],
     ]);
 
-    register_taxonomy( 'pet-types', 'lostfound', [
+    register_taxonomy( 'pet-type', 'lostfound', [
       'labels' => [
-        'name' => __( 'Pet types', 'lostfound' ),
+        'name' => __( 'Pet type', 'lostfound' ),
         'singular_name' => __( 'Pet type', 'lostfound' ),
       ],
-      'rewrite' => ['slug' => 'pet-types'],
+      'rewrite' => ['slug' => 'pet-type'],
       'show_admin_column' => true,
       'supports' => [
         'title',
@@ -82,9 +83,9 @@ Class LostFound {
   private function create_default_terms() {
     if ( get_option('lostfound_terms_created') ) return;
 
-    wp_insert_term('Cat', 'pet-types');
-    wp_insert_term('Dog', 'pet-types');
-    wp_insert_term('Other', 'pet-types');
+    wp_insert_term('Cat', 'pet-type');
+    wp_insert_term('Dog', 'pet-type');
+    wp_insert_term('Other', 'pet-type');
 
     update_option('lostfound_terms_created', true);
   }
@@ -104,112 +105,35 @@ Class LostFound {
 
     // Hide the ACF admin menu item.
     add_filter('acf/settings/show_admin', '__return_false');
-
-    // Add ACF fields
-    include_once('acf_fields.php');
-  }
-
-  private function create_post($data, $redirect_url) {
-    $args = [
-      'post_author' => 1,
-      'post_title' => $data['title'],
-      'post_status' => 'pending',
-      'post_type' => 'lostfound',
-    ];
-    $post_id = wp_insert_post($args, true);
-
-    if ( $post_id === 0 || is_object($post_id) ) return wp_redirect( add_query_arg( [ 'error' => $post_id->get_error_message() ], $redirect_url ) );
-
-    wp_set_post_terms( $post_id, $data['pet-type'] );
-
-    foreach ( $data as $key => $value ) {
-      if ($value !== '') update_field($key, $value, $post_id);
-    }
   }
 
   function register_form_shorcode($atts) {
-    wp_enqueue_script( 'lostfound_zerospam', plugin_dir_url(__FILE__) . 'includes/js/zerospam.js', [], NULL, true );
-    add_action( 'wp_enqueue_scripts', 'lostfound_zerospam' );
+    // wp_enqueue_script( 'lostfound_zerospam', plugin_dir_url(__FILE__) . 'includes/js/zerospam.js', [], NULL, true );
+    // add_action( 'wp_enqueue_scripts', 'lostfound_zerospam' );
 
+    $settings = [
+      'id' => 'lostfound-form',
+      'post_id' => 'new_post',
+      'new_post' => [
+        'post_type'   => 'lostfound',
+        'post_status' => 'pending'
+      ],
+      'field_groups' => ['lostfound-form-groups'],
+      'form' => true,
+      'updated_message' => __("Thank you for your submission!", 'acf'),
+      'honeypot' => true,
+      'submit_value' => __("Submit", 'acf'),
+    ];
+    
     ob_start();
-    include( 'form_template.php' );
+
+    acf_form_head();
+    acf_form( $settings );
     $form = ob_get_contents();
+    
     ob_end_clean();
-
+  
     return $form;
-  }
-
-  private function form_validation($form_data) {
-    if ( !isset( $form_data['lostfound_zerospam_key'] ) || $form_data['lostfound_zerospam_key'] != $this->zerospam_get_key() ) {
-      $validation['pass'] = false;
-      $validation['error'] = new WP_Error( 'spam_error', __("Error: Spam error", 'lostfound') );
-
-      return $validation;
-    }
-
-    if ( empty($form_data['nonce_lostfound_form']) || !wp_verify_nonce($form_data['nonce_lostfound_form'], 'handle_lostfound_form') ) {
-      $validation['pass'] = false;
-      $validation['error'] = new WP_Error( 'nonce_error', __("Error: Nonce error", 'lostfound') );
-
-      return $validation;
-    }
-
-    $required_fields = [
-      'lost-found',
-      'location',
-      'date',
-      'pet-type',
-      'title',
-      'description',
-      'name',
-      'phone',
-    ];
-
-    foreach ( $required_fields as $field ) {
-      if ( empty($form_data[$field]) ) {
-        $validation['pass'] = false;
-        $validation['error'] = new WP_Error( 'empty_error', __("Error: Missing ${field}", 'lostfound') );
-
-        return $validation;
-      }
-    }
-
-    $validation['pass'] = true;
-
-    return $validation;
-  }
-
-  public function handle_form_submit() {
-    if(!isset($_POST)) return;
-
-    $form_data = $_POST;
-    $validation = $this->form_validation($form_data);
-    $url_parts = parse_url( $form_data['_wp_http_referer'] );
-    $redirect_url = $url_parts['path'];
-
-    if( isset($validation['error']) ) return wp_redirect( add_query_arg( [ 'form-error' => $validation['error']->get_error_message() ], $redirect_url ) );
-
-    // Sanitize data
-    $data = [
-      'lost-found'  => sanitize_text_field( $form_data['lost-found'] ),
-      'location'    => sanitize_text_field( $form_data['location'] ),
-      'date'        => sanitize_text_field( $form_data['date'] ),
-      'pet-type'    => sanitize_key( $form_data['pet-type'] ),
-      'name'        => sanitize_text_field( $form_data['name'] ),
-      'phone'       => sanitize_text_field( $form_data['phone'] ),
-      'email'       => sanitize_email( $form_data['email'] ),
-      'title'       => sanitize_title( $form_data['title'] ),
-      'description' => sanitize_textarea_field( $form_data['description'] ),
-      'photo'       => sanitize_file_name( $form_data['photo'] ),
-    ];
-
-    $this->create_post($data, $redirect_url);
-
-    return wp_redirect( add_query_arg( [ 'form-success' => '' ], $redirect_url ) );
-  }
-
-  public function handle_ajax_form_submit() {
-    wp_send_json_success(['success', $_REQUEST]);
   }
 
   public function zerospam_get_key() {
