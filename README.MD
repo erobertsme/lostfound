@@ -8,12 +8,13 @@ Creates a shortcode to display a form which allows users to submit to a Lost and
 <br />
 
 ### TODO
-- Finish photo upload
+- ~~Finish photo upload~~
+- Email notification
+- ~~Improve acf_form_head to only load on pages the shortcode is used~~
 - Tidy acf_fields.php
-- Tidy LostFound class
 - Display CPT data shortcode [lostfound_display]
-- async submit
 - Options page
 - Captcha
+- Zero Spam (need to re-implement after switching to ACF form)
 - Default styling (with admin page option to disable and shortcode attribute override)
 - Customize CPT, Custom Taxonomy, and ACF fields (Would be renamed)

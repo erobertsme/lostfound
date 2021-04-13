@@ -20,7 +20,7 @@ Class LostFound {
 
   public function __construct() {
     add_action( 'init', [$this, 'initialize'] );
-    add_action( 'get_header', 'acf_form_head' );
+    add_action( 'get_header', [$this, 'load_acf_fields'], 0 );
     //add_action( 'wp_head', [$this, 'zerospam_load_key']);
     add_shortcode( 'lostfound_form', [$this, 'register_form_shorcode'] );
   }
@@ -105,9 +105,20 @@ Class LostFound {
     include_once('acf_fields.php');
   }
 
+  public function load_acf_fields() {
+    if (!is_page()) return;
+
+    $post_content = get_post(get_the_ID())->post_content;
+    if (has_shortcode($post_content, "lostfound_form")) {
+        acf_form_head();
+    }
+  }
+
   function register_form_shorcode($atts) {
     // wp_enqueue_script( 'lostfound_zerospam', plugin_dir_url(__FILE__) . 'includes/js/zerospam.js', [], NULL, true );
     // add_action( 'wp_enqueue_scripts', 'lostfound_zerospam' );
+
+    $atts = shortcode_atts([], $atts, 'lostfound_form');
 
     $settings = [
       'id' => 'lostfound-form',
