@@ -48,6 +48,7 @@ Class LostFound {
       ],
       'public' => true,
       'has_archive' => true,
+      'menu_icon' => 'dashicons-pets',
       'rewrite' => ['slug' => 'lostfound'],
       'supports' => [
         'title',
@@ -133,14 +134,14 @@ Class LostFound {
       'honeypot' => true,
       'submit_value' => __("Submit", 'acf'),
     ];
-    
+
     ob_start();
 
     acf_form( $settings );
     $form = ob_get_contents();
-    
+
     ob_end_clean();
-  
+
     return $form;
   }
 
