@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Lost and Found
- * Version: 1.1
+ * Version: 1.2
  * Description: Creates a shortcode to display a form which allows users to submit to a Lost and Found custom post type with custom fields and a custom Taxonomy. Use <strong>[lostfound_form]</strong> to display the form.
  * Plugin URI: https://github.com/omfgtora/lostfound
  * Author: Ethan Roberts
@@ -10,33 +10,44 @@
  * Text Domain: lostfound
  */
 
-if( ! defined( 'ABSPATH' ) ) exit;
+if( !defined( 'ABSPATH' ) || !class_exists('LostFound') ) return;
 
-if( ! class_exists('LostFound') ) :
-
-register_deactivation_hook( __FILE__, array( 'LostFound', 'deactivate' ) );
+register_deactivation_hook( __FILE__, ['LostFound', 'deactivate'] );
 
 Class LostFound {
 
+  private static $instance = null;
+
   public function __construct() {
-    add_action( 'init', [$this, 'initialize'] );
-    add_action( 'get_header', [$this, 'load_acf_fields'], 0 );
-    //add_action( 'wp_head', [$this, 'zerospam_load_key']);
+    // Define path and URL to the ACF plugin.
+    define( 'LOSTFOUND_ACF_PATH', plugin_dir_path(__FILE__) . 'includes/acf/' );
+    define( 'LOSTFOUND_ACF_URL', plugin_dir_url(__FILE__) . 'includes/acf/' );
+
+    add_action( 'init', [$this, 'initialize'], 0, 0 );
+    add_action( 'get_header', [$this, 'load_acf_form_head'], 0, 0 );
     add_shortcode( 'lostfound_form', [$this, 'register_form_shorcode'] );
+    //add_action( 'wp_head', [$this, 'zerospam_load_key']);
+  }
+
+  public static function instance() {
+    if( isset(self::$instance) ) return self::$instance;
+
+    return self::$instance = new LostFound();
   }
 
   public function initialize() {
     // Bail early if called directly from functions.php or plugin file.
     if( !did_action('plugins_loaded') ) return;
 
+    $this->include_acf();
     $this->register_cpt_tax();
     $this->create_default_terms();
-    $this->include_acf();
+    require_once('acf_fields.php');
   }
 
-  public function deactivate() {
-    delete_option( 'lostfound_terms_created' );
-    // delete_option( 'lostfound_zerospam_key' );
+  public static function deactivate() {
+    delete_option('lostfound_terms_created');
+    // delete_option('lostfound_zerospam_key');
   }
 
   // Register Post type and Taxonomy
@@ -84,42 +95,33 @@ Class LostFound {
     wp_insert_term('Dog', 'pet-type');
     wp_insert_term('Other', 'pet-type');
 
-    update_option('lostfound_terms_created', true);
+    update_option( 'lostfound_terms_created', true );
   }
 
   private function include_acf() {
-    // Define path and URL to the ACF plugin.
-    define( 'LOSTFOUND_ACF_PATH', plugin_dir_path(__FILE__) . 'includes/acf/' );
-    define( 'LOSTFOUND_ACF_URL', plugin_dir_url(__FILE__) . 'includes/acf/' );
-
     // Include the ACF plugin.
     include_once( LOSTFOUND_ACF_PATH . 'acf.php' );
 
     // Customize the url setting to fix incorrect asset URLs.
-    add_filter('acf/settings/url', function( $url ) {
-        return LOSTFOUND_ACF_URL;
+    add_filter('acf/settings/url', function($url) {
+      return LOSTFOUND_ACF_URL;
     });
 
     // Hide the ACF admin menu item.
-    add_filter('acf/settings/show_admin', '__return_false');
-
-    include_once('acf_fields.php');
+    add_filter( 'acf/settings/show_admin', '__return_false' );
   }
 
-  public function load_acf_fields() {
-    if (!is_page()) return;
+  public function load_acf_form_head() {    
+    if( !has_shortcode( get_post(get_the_ID())->post_content, "lostfound_form" ) ) return;
 
-    $post_content = get_post(get_the_ID())->post_content;
-    if (has_shortcode($post_content, "lostfound_form")) {
-        acf_form_head();
-    }
+    acf_form_head();
   }
 
-  function register_form_shorcode($atts) {
+  public function register_form_shorcode($atts) {
     // wp_enqueue_script( 'lostfound_zerospam', plugin_dir_url(__FILE__) . 'includes/js/zerospam.js', [], NULL, true );
     // add_action( 'wp_enqueue_scripts', 'lostfound_zerospam' );
 
-    $atts = shortcode_atts([], $atts, 'lostfound_form');
+    $atts = shortcode_atts( [], $atts, 'lostfound_form' );
 
     $settings = [
       'id' => 'lostfound-form',
@@ -130,49 +132,32 @@ Class LostFound {
       ],
       'field_groups' => ['lostfound-form-groups'],
       'form' => true,
-      'updated_message' => __("Thank you for your submission!", 'acf'),
+      'updated_message' => __( "Thank you for your submission!", 'acf' ),
       'honeypot' => true,
-      'submit_value' => __("Submit", 'acf'),
+      'submit_value' => __( "Submit", 'acf' ),
     ];
 
-    ob_start();
-
-    acf_form( $settings );
-    $form = ob_get_contents();
-
-    ob_end_clean();
-
-    return $form;
+    return acf_form($settings);
   }
 
-  public function zerospam_get_key() {
-    if ( ! $key = get_option('lostfound_zerospam_key') ) {
-      $key = wp_generate_password( 64, false, false );
-      update_option( 'lostfound_zerospam_key', $key, FALSE );
-    }
-    return $key;
+  // Temporarily unused
+  private function zerospam_get_key() {
+    $key = get_option('lostfound_zerospam_key');
+    if ( !empty($key) ) return $key;
+
+    $key = wp_generate_password( 64, false, false );
+    update_option( 'lostfound_zerospam_key', $key, FALSE );
   }
 
+  // Temporarily unused
+  // Should be replace with acf/render_field hook
   public function zerospam_load_key() {
-    ?>
-<script> const lfzs_key = '<?php echo $this->zerospam_get_key(); ?>';</script>
-    <?php
+    $key = $this->zerospam_get_key();
+    $sanitized_key = esc_js($key);
+    echo "<script> const lfzs_key = ${sanitized_key};</script>";
   }
 
 } // End LostFound class
 
-function lostfound() {
-	global $lostfound;
-	
-	// Instantiate only once.
-	if( !isset($lostfound) ) {
-		$lostfound = new LostFound();
-		$lostfound->initialize();
-	}
-	return $lostfound;
-}
-
 // Instantiate.
-lostfound();
-
-endif; // class_exists check
+LostFound::instance();
