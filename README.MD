@@ -9,10 +9,9 @@ Creates a shortcode to display a form which allows users to submit to a Lost and
 
 ### TODO
 - ~~Finish photo upload~~
-- Email notification
+- ~~Email notification~~
 - ~~Improve acf_form_head to only load on pages the shortcode is used~~
-- Tidy acf_fields.php
-- Display CPT data shortcode [lostfound_display]
+- Shortcode to display the CPT data [lostfound_display]
 - Options page
 - Captcha
 - Zero Spam (need to re-implement after switching to ACF form)
