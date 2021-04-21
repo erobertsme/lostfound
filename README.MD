@@ -8,7 +8,7 @@ Creates a shortcode to display a form which allows users to submit to a Lost and
 ### Installation
 Download the latest release (.zip file). Log into the WordPress dashboard. Under "Plugins" select "Add new". Click the "Upload plugin button near the top". Click "Choose file" and select the downloaded latest release, or drag and drop the file into the box.
 
-https://wordpress.org/support/article/managing-plugins/#manual-upload-via-wordpress-admin
+<a href="https://wordpress.org/support/article/managing-plugins/#manual-upload-via-wordpress-admin" target="_blank">https://wordpress.org/support/article/managing-plugins/#manual-upload-via-wordpress-admin</a>
 <br />
 
 ### TODO
