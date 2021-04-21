@@ -31,4 +31,4 @@ https://wordpress.org/support/article/managing-plugins/#manual-upload-via-wordpr
 
 ![menu](https://user-images.githubusercontent.com/9193319/115627674-4297f500-a2b4-11eb-8321-9af692ec7b5e.png)
 ![settings](https://user-images.githubusercontent.com/9193319/115627671-41ff5e80-a2b4-11eb-9997-08ff929f4108.png)
-![form_example](https://user-images.githubusercontent.com/9193319/115627672-4297f500-a2b4-11eb-8def-e15324bd6c2b.png =200x404)
+<img src="https://user-images.githubusercontent.com/9193319/115627672-4297f500-a2b4-11eb-8def-e15324bd6c2b.png" width="200" height="404">
