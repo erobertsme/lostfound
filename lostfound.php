@@ -24,6 +24,7 @@ Class LostFound {
     define( 'LOSTFOUND_ACF_URL', plugin_dir_url( __FILE__ ) . 'includes/acf/' );
 
     add_action( 'init', [$this, 'initialize'], 0, 0 );
+    add_action( 'admin_menu', [$this, 'register_options_page'] );
     add_action( 'get_header', [$this, 'load_acf_form_head'], 0, 0 );
     add_action( 'acf/submit_form', [$this, 'action_send_email'], 10, 2);
     add_shortcode( 'lostfound_form', [$this, 'register_form_shorcode'] );
@@ -89,6 +90,28 @@ Class LostFound {
     ]);
   }
 
+  public function register_options_page() {
+    $parent_slug = 'edit.php?post_type=lostfound';
+    $page_title = 'Lost and Found Pets - Settings';
+    $menu_title = 'Settings';
+    $capability = 'edit_pages';
+    $menu_slug = 'lostfound-settings';
+    $function = [$this, 'output_options_page'];
+
+    add_submenu_page( 
+      $parent_slug,
+      $page_title,
+      $menu_title,
+      $capability,
+      $menu_slug,
+      $function,
+    );
+  }
+
+  public function output_options_page() {
+    include( plugin_dir_path( __FILE__ ) . 'options.php' );
+  }
+
   private function create_default_terms() {
     if ( get_option( 'lostfound_terms_created' ) ) return;
 
@@ -129,7 +152,7 @@ Class LostFound {
       'post_id' => 'new_post',
       'new_post' => [
         'post_type'   => 'lostfound',
-        'post_status' => 'pending'
+        'post_status' => 'pending',
       ],
       'post_title' => true,
       'field_groups' => ['lostfound-form-groups'],
@@ -148,7 +171,7 @@ Class LostFound {
     return wp_mail( 
       $settings['email'],
       'New Lost and Found Pets Submission',
-      'There is a new submission for Lost and Found Pets'
+      'There is a new submission for Lost and Found Pets',
     );
   }
 
