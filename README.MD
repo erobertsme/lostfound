@@ -5,6 +5,13 @@
 ### Description
 Creates a shortcode to display a form which allows users to submit to a Lost and Found custom post type with ACF custom fields. Use **[lostfound_form]** to display the form.
 
+![settings](https://user-images.githubusercontent.com/9193319/115627671-41ff5e80-a2b4-11eb-9997-08ff929f4108.png)
+![form_example](https://user-images.githubusercontent.com/9193319/115627672-4297f500-a2b4-11eb-8def-e15324bd6c2b.png)
+![menu](https://user-images.githubusercontent.com/9193319/115627674-4297f500-a2b4-11eb-8321-9af692ec7b5e.png)
+
+### Installation
+Download the latest release
+
 <br />
 
 ### TODO
