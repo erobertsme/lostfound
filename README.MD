@@ -11,7 +11,7 @@ Creates a shortcode to display a form which allows users to submit to a Lost and
 - ~~Finish photo upload~~
 - ~~Email notification~~
 - ~~Improve acf_form_head to only load on pages the shortcode is used~~
-- Options page
+- ~~Options page~~
 - Shortcode to display the CPT data [lostfound_display]
 - Zero Spam (need to re-implement after switching to ACF form)
 - Captcha

@@ -1,7 +1,7 @@
 <?php
 if( !function_exists('acf_add_local_field_group') ) return;
 
-$acf_fields = [
+$lostfound_fields = [
   'key' => 'lostfound-form-groups',
   'title' => 'Lost and Found Pets Fields',
   'fields' => [
@@ -201,4 +201,4 @@ $acf_fields = [
   'description' => '',
 ];
 
-acf_add_local_field_group($acf_fields);
+acf_add_local_field_group( $lostfound_fields );

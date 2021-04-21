@@ -12,8 +12,6 @@
 
 if( !defined( 'ABSPATH' ) || !class_exists( 'LostFound') ) return;
 
-register_deactivation_hook( __FILE__, ['LostFound', 'deactivate'] );
-
 Class LostFound {
 
   private static $instance = null;
@@ -24,7 +22,6 @@ Class LostFound {
     define( 'LOSTFOUND_ACF_URL', plugin_dir_url( __FILE__ ) . 'includes/acf/' );
 
     add_action( 'init', [$this, 'initialize'], 0, 0 );
-    add_action( 'admin_menu', [$this, 'register_options_page'] );
     add_action( 'get_header', [$this, 'load_acf_form_head'], 0, 0 );
     add_action( 'acf/submit_form', [$this, 'action_send_email'], 10, 2);
     add_shortcode( 'lostfound_form', [$this, 'register_form_shorcode'] );
@@ -43,12 +40,19 @@ Class LostFound {
 
     $this->include_acf();
     $this->register_cpt_tax();
-    $this->create_default_terms();
+
+    require_once( plugin_dir_path( __FILE__ ) . 'lostfound_options.php' );
     require_once( plugin_dir_path( __FILE__ ) . 'acf_fields.php' );
+
+    $this->create_defauls();
+
+    register_deactivation_hook( __FILE__, [$this, 'deactivate'] );
   }
 
   public static function deactivate() {
     delete_option( 'lostfound_terms_created' );
+    delete_option( 'lostfound_settings' );
+    unregister_setting( 'lostfound_settings_group', 'lostfound_settings' );
     // delete_option( 'lostfound_zerospam_key' );
   }
 
@@ -90,34 +94,21 @@ Class LostFound {
     ]);
   }
 
-  public function register_options_page() {
-    $parent_slug = 'edit.php?post_type=lostfound';
-    $page_title = 'Lost and Found Pets - Settings';
-    $menu_title = 'Settings';
-    $capability = 'edit_pages';
-    $menu_slug = 'lostfound-settings';
-    $function = [$this, 'output_options_page'];
-
-    add_submenu_page( 
-      $parent_slug,
-      $page_title,
-      $menu_title,
-      $capability,
-      $menu_slug,
-      $function,
-    );
-  }
-
   public function output_options_page() {
-    include( plugin_dir_path( __FILE__ ) . 'options.php' );
+    load_template( plugin_dir_path( __FILE__ ) . 'lostfound_options.php' );
   }
 
-  private function create_default_terms() {
+  private function create_defauls() {
     if ( get_option( 'lostfound_terms_created' ) ) return;
 
     wp_insert_term( 'Cat', 'pet-type' );
     wp_insert_term( 'Dog', 'pet-type' );
     wp_insert_term( 'Other', 'pet-type' );
+
+    update_option( 'lostfound_settings', [
+      'new_post_status' => 'pending',
+      'notifications_email' => get_bloginfo( 'admin_email' )
+    ]);
 
     update_option( 'lostfound_terms_created', true );
   }
@@ -147,12 +138,14 @@ Class LostFound {
 
     $atts = shortcode_atts( [], $atts, 'lostfound_form' );
 
+    $new_post_status = get_option( 'lostfound_settings' )['new_post_status'];
+
     $settings = [
       'id' => 'lostfound-form',
       'post_id' => 'new_post',
       'new_post' => [
         'post_type'   => 'lostfound',
-        'post_status' => 'pending',
+        'post_status' => ( $new_post_status ) ? $new_post_status : 'pending',
       ],
       'post_title' => true,
       'field_groups' => ['lostfound-form-groups'],
@@ -176,7 +169,7 @@ Class LostFound {
   }
 
   public function action_send_email( $form, $post_id ) {
-    $settings['email'] = get_option( 'lostfound_email' );
+    $settings['email'] = get_option( 'lostfound_settings' )['notifications_email'];
 
     if ( !$settings['email'] ) $settings['email'] = get_bloginfo( 'admin_email' );
 
@@ -202,5 +195,4 @@ Class LostFound {
 
 } // End LostFound class
 
-// Instantiate.
 LostFound::instance();
