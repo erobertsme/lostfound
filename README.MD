@@ -16,6 +16,7 @@ Creates a shortcode to display a form which allows users to submit to a Lost and
 - Zero Spam (need to re-implement after switching to ACF form)
 - Captcha
 - Options:
+  - multiple notification email addresses
   - notification message
   - CPT slug
 - Refactor options page
