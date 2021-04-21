@@ -6,8 +6,9 @@
 Creates a shortcode to display a form which allows users to submit to a Lost and Found custom post type with ACF custom fields. Use **[lostfound_form]** to display the form.
 
 ### Installation
-Download the latest release
+Download the latest release (.zip file). Log into the WordPress dashboard. Under "Plugins" select "Add new". Click the "Upload plugin button near the top". Click "Choose file" and select the downloaded latest release, or drag and drop the file into the box.
 
+https://wordpress.org/support/article/managing-plugins/#manual-upload-via-wordpress-admin
 <br />
 
 ### TODO
@@ -26,6 +27,8 @@ Download the latest release
 - Default styling (with admin page option to disable and shortcode attribute override)
 - Customize CPT, Custom Taxonomy, and ACF fields (Would likely need to be renamed)
 
-![settings](https://user-images.githubusercontent.com/9193319/115627671-41ff5e80-a2b4-11eb-9997-08ff929f4108.png)
-![form_example](https://user-images.githubusercontent.com/9193319/115627672-4297f500-a2b4-11eb-8def-e15324bd6c2b.png)
+### Screenshots
+
 ![menu](https://user-images.githubusercontent.com/9193319/115627674-4297f500-a2b4-11eb-8321-9af692ec7b5e.png)
+![settings](https://user-images.githubusercontent.com/9193319/115627671-41ff5e80-a2b4-11eb-9997-08ff929f4108.png)
+![form_example](https://user-images.githubusercontent.com/9193319/115627672-4297f500-a2b4-11eb-8def-e15324bd6c2b.png =200x404)
