@@ -44,7 +44,7 @@ Class LostFound {
     require_once( plugin_dir_path( __FILE__ ) . 'lostfound_options.php' );
     require_once( plugin_dir_path( __FILE__ ) . 'acf_fields.php' );
 
-    $this->create_defauls();
+    $this->create_defaults();
 
     register_deactivation_hook( __FILE__, [$this, 'deactivate'] );
   }
@@ -98,7 +98,7 @@ Class LostFound {
     load_template( plugin_dir_path( __FILE__ ) . 'lostfound_options.php' );
   }
 
-  private function create_defauls() {
+  private function create_defaults() {
     if ( get_option( 'lostfound_terms_created' ) ) return;
 
     wp_insert_term( 'Cat', 'pet-type' );

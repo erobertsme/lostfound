@@ -57,9 +57,9 @@ function lostfound_settings_init() {
 function notifications_email_render() { 
 
   $option = get_option( 'lostfound_settings' )['notifications_email'];
-?>
-  <input type="email" name="lostfound_settings[notifications_email]" value="<?php echo $option; ?>" required>
-<?php
+  ?>
+<input type="email" name="lostfound_settings[notifications_email]" value="<?php echo $option; ?>" required>
+  <?php
 
 }
 
@@ -67,42 +67,42 @@ function notifications_email_render() {
 function new_post_status_render() { 
 
   $option = get_option( 'lostfound_settings' )['new_post_status'];
-?>
-  <select name='lostfound_settings[new_post_status]' required>
-    <option value="publish" <?php selected( $option, 1 ); ?>>Published</option>
-    <option value="pending" <?php selected( $option, 2 ); ?>>Pending</option>
-  </select>
-<?php
+  ?>
+<select name='lostfound_settings[new_post_status]' required>
+  <option value="publish" <?php selected( $option, 1 ); ?>>Published</option>
+  <option value="pending" <?php selected( $option, 2 ); ?>>Pending</option>
+</select>
+  <?php
 
 }
 
 
 function lostfound_settings_section_callback() { 
-?>
+  ?>
 <p>Set the Notification Email setting to the email address that will receive new submission notifications. Default: admin email</p>
 <p>The new post status determines whether new posts are published automatically or wait for admin approval. Default: Pending</p>
-<?php
+  <?php
 }
 
 
 function lostfound_options_page() { 
 
   ?>
-  <div class="container">
-  <h1>Lost and Found</h1>
-    <form action="options.php" method="post">
-      <div class="settings">
-        <?php
-        settings_fields( 'lostfound_settings_group' );
-        do_settings_sections( 'lostfound_settings_group' );
-        ?>
-      </div>
-      <div class="submit">
-        <?php submit_button(); ?>
-      </div>
+<div class="container">
+<h1>Lost and Found</h1>
+  <form action="options.php" method="post">
+    <div class="settings">
+      <?php
+      settings_fields( 'lostfound_settings_group' );
+      do_settings_sections( 'lostfound_settings_group' );
+      ?>
+    </div>
+    <div class="save">
+      <?php submit_button(); ?>
+    </div>
 
-    </form>
-  </div>
+  </form>
+</div>
   <?php
 
 }
