@@ -4,6 +4,7 @@
 
 ### Description
 Creates a shortcode to display a form which allows users to submit to a Lost and Found custom post type with ACF custom fields. Use **[lostfound_form]** to display the form.
+Options page requires the edit_page capability.
 
 ### Installation
 Download the latest release (.zip file). Log into the WordPress dashboard. Under "Plugins" select "Add new". Click the "Upload plugin button near the top". Click "Choose file" and select the downloaded latest release, or drag and drop the file into the box.
