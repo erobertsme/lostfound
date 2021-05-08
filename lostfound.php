@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Lost and Found
- * Version: 1.0
+ * Version: 1.1
  * Description: Creates a shortcode to display a form which allows users to submit to a Lost and Found custom post type with custom fields and a custom Taxonomy. Use <strong>[lostfound_form]</strong> to display the form.
  * Plugin URI: https://github.com/omfgtora/lostfound
  * Author: Ethan Roberts
