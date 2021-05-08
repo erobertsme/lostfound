@@ -25,6 +25,7 @@ Class LostFound {
     add_action( 'get_header', [$this, 'load_acf_form_head'], 0, 0 );
     add_action( 'acf/submit_form', [$this, 'action_send_email'], 10, 2);
     add_shortcode( 'lostfound_form', [$this, 'register_form_shorcode'] );
+    add_filter('acf/update_value/name=photo', [$this, 'acf_set_featured_image'], 10, 3);
     //add_action( 'wp_head', [$this, 'zerospam_load_key']);
   }
 
@@ -157,6 +158,16 @@ Class LostFound {
 
     return acf_form( $settings );
   }
+
+  function acf_set_featured_image( $value, $post_id, $field  ){
+    
+    if($value != ''){
+	    //Add the value which is the image ID to the _thumbnail_id meta data for the current post
+	    add_post_meta($post_id, '_thumbnail_id', $value);
+    }
+ 
+    return $value;
+}
 
   private function send_email_notification( $settings ) {
     if ( empty( $settings['email'] ) ) $settings['email'] = get_bloginfo( 'admin_email' );
