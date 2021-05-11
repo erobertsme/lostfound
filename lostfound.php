@@ -108,7 +108,8 @@ Class LostFound {
 
     update_option( 'lostfound_settings', [
       'new_post_status' => 'pending',
-      'notifications_email' => get_bloginfo( 'admin_email' )
+      'notifications_email' => get_bloginfo( 'admin_email' ),
+      'submit_redirect_url' => ''
     ]);
 
     update_option( 'lostfound_terms_created', true );
@@ -128,7 +129,7 @@ Class LostFound {
   }
 
   public function load_acf_form_head() {    
-    if( !has_shortcode( get_post( get_the_ID() )->post_content, "lostfound_form" ) ) return;
+    if( is_page() && !has_shortcode( get_post( get_the_ID() )->post_content, "lostfound_form" ) ) return;
 
     acf_form_head();
   }
@@ -154,6 +155,7 @@ Class LostFound {
       'updated_message' => __( "Thank you for your submission!", 'acf' ),
       'honeypot' => true,
       'submit_value' => __( "Submit", 'acf' ),
+      'return' => get_option( 'lostfound_settings' )['submit_redirect_url'],
     ];
 
     return acf_form( $settings );
@@ -163,9 +165,9 @@ Class LostFound {
     
     if($value != ''){
 	    //Add the value which is the image ID to the _thumbnail_id meta data for the current post
-	    add_post_meta($post_id, '_thumbnail_id', $value);
+      add_post_meta($post_id, '_thumbnail_id', $value);
     }
- 
+
     return $value;
 }
 

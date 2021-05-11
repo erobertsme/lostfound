@@ -23,7 +23,6 @@ function lostfound_add_admin_menu() {
 
 }
 
-
 function lostfound_settings_init() { 
 
   register_setting( 'lostfound_settings_group', 'lostfound_settings' );
@@ -51,8 +50,15 @@ function lostfound_settings_init() {
     'lostfound_settings_group_section' 
   );
 
-}
+  add_settings_field( 
+    'submit_redirect_url', 
+    __( 'Redirect URL', 'lostfound' ), 
+    'submit_redirect_url_render', 
+    'lostfound_settings_group', 
+    'lostfound_settings_group_section' 
+  );
 
+}
 
 function notifications_email_render() { 
 
@@ -62,7 +68,6 @@ function notifications_email_render() {
   <?php
 
 }
-
 
 function new_post_status_render() { 
 
@@ -76,14 +81,22 @@ function new_post_status_render() {
 
 }
 
+function submit_redirect_url_render() { 
+
+  $option = get_option( 'lostfound_settings' )['submit_redirect_url'];
+  ?>
+<input type="text" name="lostfound_settings[submit_redirect_url]" value="<?php echo $option; ?>" required>
+  <?php
+
+}
 
 function lostfound_settings_section_callback() { 
   ?>
 <p>Set the Notification Email setting to the email address that will receive new submission notifications. Default: admin email</p>
 <p>The new post status determines whether new posts are published automatically or wait for admin approval. Default: Pending</p>
+<p>The Redirect URL section determines the URL which the user is redirected to after submitting a new post</p>
   <?php
 }
-
 
 function lostfound_options_page() { 
 
