@@ -164,7 +164,7 @@ Class LostFound {
   function acf_set_featured_image( $value, $post_id, $field  ){
     
     if($value != ''){
-	    //Add the value which is the image ID to the _thumbnail_id meta data for the current post
+      //Add the value which is the image ID to the _thumbnail_id meta data for the current post
       add_post_meta($post_id, '_thumbnail_id', $value);
     }
 
