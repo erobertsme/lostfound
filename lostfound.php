@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Lost and Found
- * Version: 1.3
+ * Version: 1.4
  * Description: Creates a shortcode to display a form which allows users to submit to a Lost and Found custom post type with custom fields and a custom Taxonomy. Use <strong>[lostfound_form]</strong> to display the form.
  * Plugin URI: https://github.com/omfgtora/lostfound
  * Author: Ethan Roberts
@@ -24,7 +24,8 @@ Class LostFound {
     add_action( 'init', [$this, 'initialize'], 0, 0 );
     add_action( 'get_header', [$this, 'load_acf_form_head'], 0, 0 );
     add_action( 'acf/submit_form', [$this, 'action_send_email'], 10, 2);
-    add_shortcode( 'lostfound_form', [$this, 'register_form_shorcode'] );
+    add_shortcode( 'lostfound_form', [$this, 'register_form_shortcode'] );
+    add_shortcode( 'lostfound_date', [$this, 'register_date_shortcode'] );
     add_filter('acf/update_value/name=photo', [$this, 'acf_set_featured_image'], 10, 3);
     //add_action( 'wp_head', [$this, 'zerospam_load_key']);
   }
@@ -134,7 +135,7 @@ Class LostFound {
     acf_form_head();
   }
 
-  public function register_form_shorcode( $atts ) {
+  public function register_form_shortcode( $atts ) {
     // wp_enqueue_script( 'lostfound_zerospam', plugin_dir_url( __FILE__ ) . 'includes/js/zerospam.js', [], NULL, true );
     // add_action( 'wp_enqueue_scripts', 'lostfound_zerospam' );
 
@@ -159,6 +160,15 @@ Class LostFound {
     ];
 
     return acf_form( $settings );
+  }
+
+  public function register_date_shortcode( $atts ) {
+
+    $atts = shortcode_atts( [], $atts, 'lostfound_form' );
+
+    if ( get_post_type() !== 'lostfound' ) return;
+
+    return get_field( 'field_6071016363a72' );
   }
 
   function acf_set_featured_image( $value, $post_id, $field  ){
