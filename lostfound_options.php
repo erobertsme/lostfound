@@ -74,8 +74,8 @@ function new_post_status_render() {
   $option = get_option( 'lostfound_settings' )['new_post_status'];
   ?>
 <select name='lostfound_settings[new_post_status]' required>
-  <option value="publish" <?php selected( $option, 1 ); ?>>Published</option>
-  <option value="pending" <?php selected( $option, 2 ); ?>>Pending</option>
+  <option value="publish" <?php selected( $option, 'publish' ); ?>>Published</option>
+  <option value="pending" <?php selected( $option, 'pending' ); ?>>Pending</option>
 </select>
   <?php
 
