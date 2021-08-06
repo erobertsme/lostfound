@@ -138,6 +138,8 @@ Class LostFound {
   public function register_form_shortcode( $atts ) {
     // wp_enqueue_script( 'lostfound_zerospam', plugin_dir_url( __FILE__ ) . 'includes/js/zerospam.js', [], NULL, true );
     // add_action( 'wp_enqueue_scripts', 'lostfound_zerospam' );
+    
+    if ( is_admin() ) return;
 
     $atts = shortcode_atts( [], $atts, 'lostfound_form' );
 
