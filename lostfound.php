@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Lost and Found
- * Version: 1.4.3
+ * Version: 1.4.4
  * Description: Creates a shortcode to display a form which allows users to submit to a Lost and Found custom post type with custom fields and a custom Taxonomy. Use <strong>[lostfound_form]</strong> to display the form.
  * Plugin URI: https://github.com/omfgtora/lostfound
  * Author: Ethan Roberts
@@ -26,6 +26,7 @@ Class LostFound {
     add_action( 'acf/submit_form', [$this, 'action_send_email'], 10, 2);
     add_shortcode( 'lostfound_form', [$this, 'register_form_shortcode'] );
     add_shortcode( 'lostfound_date', [$this, 'register_date_shortcode'] );
+    add_shortcode( 'lostfound_pet_type', [$this, 'register_pet_type_shortcode'] );
     add_filter('acf/update_value/name=photo', [$this, 'acf_set_featured_image'], 10, 3);
     //add_action( 'wp_head', [$this, 'zerospam_load_key']);
   }
@@ -164,13 +165,18 @@ Class LostFound {
     return acf_form( $settings );
   }
 
-  public function register_date_shortcode( $atts ) {
-
-    $atts = shortcode_atts( [], $atts, 'lostfound_form' );
+  public function register_date_shortcode() {
 
     if ( get_post_type() !== 'lostfound' ) return;
 
     return get_field( 'field_6071016363a72' );
+  }
+
+  public function register_pet_type_shortcode() {
+
+    if ( get_post_type() !== 'lostfound' ) return;
+
+    return get_field( 'field_60710a6663a73' )->name;
   }
 
   function acf_set_featured_image( $value, $post_id, $field  ){
