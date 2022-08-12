@@ -75,15 +75,15 @@ Class LostFound {
         'author',
         'thumbnail',
         'custom-fields',
-        'pet-types',
+        'pet-type',
         'comments',
       ],
-      'taxonomies' => ['pet-types', 'post_tag'],
+      'taxonomies' => ['pet-type', 'post_tag'],
     ]);
 
     register_taxonomy( 'pet-type', 'lostfound', [
       'labels' => [
-        'name' => __( 'Pet type', 'lostfound' ),
+        'name' => __( 'Pet types', 'lostfound' ),
         'singular_name' => __( 'Pet type', 'lostfound' ),
       ],
       'rewrite' => ['slug' => 'pet-type'],
